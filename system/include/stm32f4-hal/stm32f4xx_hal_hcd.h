@@ -43,8 +43,7 @@
  extern "C" {
 #endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_ll_usb.h"
+
 
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{
@@ -72,11 +71,14 @@ typedef enum
   HAL_HCD_STATE_TIMEOUT  = 0x04
 } HCD_StateTypeDef;
 
-typedef USB_OTG_GlobalTypeDef   HCD_TypeDef;
-typedef USB_OTG_CfgTypeDef      HCD_InitTypeDef;
-typedef USB_OTG_HCTypeDef       HCD_HCTypeDef ;
-typedef USB_OTG_URBStateTypeDef HCD_URBStateTypeDef ;
-typedef USB_OTG_HCStateTypeDef  HCD_HCStateTypeDef ;
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_ll_usb.h"
+
+typedef USB_OTG_GlobalTypeDef HCD_TypeDef;
+typedef USB_OTG_URBStateTypeDef HCD_URBStateTypeDef;
+typedef USB_OTG_HCStateTypeDef HCD_HCStateTypeDef;
+typedef USB_OTG_HCTypeDef HCD_HCTypeDef;
+typedef USB_OTG_CfgTypeDef HCD_InitTypeDef;
 /**
   * @}
   */

@@ -71,10 +71,12 @@ typedef enum
   HAL_PCD_STATE_TIMEOUT = 0x04
 } PCD_StateTypeDef;
 
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_ll_usb.h"
 
-typedef USB_OTG_GlobalTypeDef  PCD_TypeDef;
-typedef USB_OTG_CfgTypeDef     PCD_InitTypeDef;
-typedef USB_OTG_EPTypeDef      PCD_EPTypeDef ;
+typedef USB_OTG_GlobalTypeDef PCD_TypeDef;
+typedef USB_OTG_EPTypeDef PCD_EPTypeDef ;
+typedef USB_OTG_CfgTypeDef PCD_InitTypeDef;
 
 /** 
   * @brief  PCD Handle Structure definition  
