@@ -7,11 +7,13 @@
 
 #include <stdio.h>
 #include "diag/Trace.h"
-#include "stm32f4xx_ll_usb.h"
 
-#include "Timer.h"
+#include "usbd_core.h"
+#include "usbd_cdc.h"
+#include "usbd_cdc_if.h"
+#include "usbd_desc.h"
 #include "BlinkLed.h"
-#include "UsbDevice.h"
+#include "stm32f4xx_hal.h"
 
 // ----------------------------------------------------------------------------
 //
@@ -36,11 +38,21 @@
 // (currently OS_USE_TRACE_ITM, OS_USE_TRACE_SEMIHOSTING_DEBUG/_STDOUT).
 //
 
+
 // ----- Timing definitions -------------------------------------------------
 
 // Keep the LED on for 2/3 of a second.
+#define TIMER_FREQUENCY_HZ 1000
 #define BLINK_ON_TICKS  (TIMER_FREQUENCY_HZ * 2 / 3)
 #define BLINK_OFF_TICKS (TIMER_FREQUENCY_HZ - BLINK_ON_TICKS)
+
+
+
+/* Variables used for USB */
+USBD_HandleTypeDef  hUSBDDevice;
+
+static uint32_t Demo_USBConfig(void);
+
 
 // ----- main() ---------------------------------------------------------------
 
@@ -72,11 +84,9 @@ main(int argc, char* argv[])
   // at high speed.
   trace_printf("System clock: %uHz\n", SystemCoreClock);
 
-  timer_start();
-
   blink_led_init();
-  
-  init_device();
+
+  Demo_USBConfig();
 
   uint32_t seconds = 0;
 
@@ -84,10 +94,10 @@ main(int argc, char* argv[])
   while (1)
     {
       blink_led_on();
-      timer_sleep(BLINK_ON_TICKS);
+      HAL_Delay(BLINK_ON_TICKS);
 
       blink_led_off();
-      timer_sleep(BLINK_OFF_TICKS);
+      HAL_Delay(BLINK_OFF_TICKS);
 
       ++seconds;
 
@@ -95,6 +105,29 @@ main(int argc, char* argv[])
       trace_printf("Second %u\n", seconds);
     }
   // Infinite loop, never return.
+}
+
+
+
+/**
+  * @brief  Initializes the USB for the demonstration application.
+  * @param  None
+  * @retval None
+  */
+static uint32_t Demo_USBConfig(void)
+{
+  /* Init Device Library */
+  USBD_Init(&hUSBDDevice, &CDC_Desc, 0);
+
+  hUSBDDevice.pUserData = &USBD_CDC_Usr_fops;
+
+  /* Add Supported Class */
+  USBD_RegisterClass(&hUSBDDevice, USBD_CDC_CLASS);
+
+  /* Start Device Process */
+  USBD_Start(&hUSBDDevice);
+
+  return 0;
 }
 
 #pragma GCC diagnostic pop

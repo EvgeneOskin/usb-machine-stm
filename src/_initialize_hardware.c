@@ -8,6 +8,7 @@
 #include "stm32f4xx.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_cortex.h"
+#include "cortexm/ExceptionHandlers.h"
 
 // ----------------------------------------------------------------------------
 
@@ -80,17 +81,6 @@ __initialize_hardware(void)
   // Enable HSE Oscillator and activate PLL with HSE as source
   configure_system_clock();
 }
-
-#if 0
-
-// This is a sample SysTick handler, use it if you need HAL timings.
-void __attribute__ ((section(".after_vectors")))
-SysTick_Handler(void)
-{
-	HAL_IncTick();
-}
-
-#endif
 
 // ----------------------------------------------------------------------------
 
